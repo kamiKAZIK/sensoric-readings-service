@@ -1,6 +1,19 @@
 spring:
   application:
     name: sensor-service
+
+sensoric:
+  security:
+    user:
+      name: readings-user
+      roles: USER
+    manager:
+      name: readings-manager
+      roles: ACTUATOR
+  mongo:
+    hosts: localhost
+    database: readings
+    user: readings
 ---
 spring:
   profiles: local
@@ -9,3 +22,12 @@ spring:
      uri: http://localhost:38888
      username: configuration-user
      password: configuration-user
+
+sensoric:
+  security:
+    user:
+      password: '{noop}readings-user'
+    manager:
+      password: '{noop}readings-manager'
+  mongo:
+    password: 'readings'
