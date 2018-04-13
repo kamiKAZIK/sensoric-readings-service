@@ -1,14 +1,12 @@
 package com.sensoric.readings.domain.service;
 
-import com.sensoric.readings.domain.model.HumidityReading;
-import com.sensoric.readings.domain.model.TemperatureReading;
+import com.sensoric.readings.domain.model.TemperatureAndHumidityReading;
+import com.sensoric.readings.domain.model.TemperatureAndHumidityReading.ReadingValue;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public interface ReadingService {
-    TemperatureReading readTemperature(String sensorId, LocalDateTime timestampFrom, LocalDateTime timesTo);
-    HumidityReading readHumidity(String sensorId, LocalDateTime timestampFrom, LocalDateTime timesTo);
-    void persistTemperature(String sensorId, Float temperature, LocalDateTime timestamp);
-    void persistHumidity(String sensorId, Float humidity, LocalDateTime timestamp);
+    Mono<TemperatureAndHumidityReading> readTemperatureAndHumidity(String sensorId, LocalDateTime timestampFrom, LocalDateTime timestampTo);
+    Mono<TemperatureAndHumidityReading> persistTemperatureAndHumidity(String sensorId, ReadingValue readingValue, LocalDateTime timestamp);
 }

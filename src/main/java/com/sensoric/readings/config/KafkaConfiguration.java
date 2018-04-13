@@ -1,4 +1,4 @@
-package com.sensoric.readings.config;
+/*package com.sensoric.readings.config;
 
 import lombok.Data;
 import org.springframework.cloud.stream.annotation.EnableBinding;
@@ -18,4 +18,4 @@ public class KafkaConfiguration {
 	public static final class MMM {
 		private String a;
 	}
-}
+}*/
