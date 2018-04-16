@@ -26,14 +26,13 @@ dependencyManagement {
 
 dependencies {
     compile 'org.springframework.cloud:spring-cloud-config-client'
-    //compile 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
 
     compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-starter-security'
-    compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    compile 'org.springframework.boot:spring-boot-starter-data-cassandra'
 
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    compile 'io.netty:netty-transport-native-epoll:4.1.22.Final:linux-x86_64'
 }
 
 bootJar {

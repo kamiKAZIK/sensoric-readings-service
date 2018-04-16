@@ -1,51 +1,36 @@
 package com.sensoric.readings.domain.service;
 
-import com.mongodb.client.result.UpdateResult;
 import com.sensoric.readings.domain.model.Reading;
-import com.sensoric.readings.domain.model.TemperatureAndHumidityReading;
-import com.sensoric.readings.domain.model.TemperatureAndHumidityReading.ReadingValue;
-import com.sensoric.readings.domain.repository.TemperatureAndHumidityReadingRepository;
+import com.sensoric.readings.domain.repository.ReadingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.UUID;
 
 @Service
 public class DefaultReadingService implements ReadingService {
-	private final TemperatureAndHumidityReadingRepository temperatureAndHumidityReadingRepository;
+	private final ReadingRepository readingRepository;
 
 	@Autowired
-	public DefaultReadingService(TemperatureAndHumidityReadingRepository temperatureAndHumidityReadingRepository) {
-		this.temperatureAndHumidityReadingRepository = temperatureAndHumidityReadingRepository;
+	public DefaultReadingService(ReadingRepository readingRepository) {
+		this.readingRepository = readingRepository;
 	}
 
 	@Override
-	public Mono<TemperatureAndHumidityReading> readTemperatureAndHumidity(String sensorId, LocalDateTime timestampFrom, LocalDateTime timestampTo) {
-		//return temperatureAndHumidityReadingRepository.findReadingsBetweenDates(sensorId, timestampFrom, timestampTo);
-		return null;
+	public Flux<Reading> readTemperatureAndHumidity(UUID sensorId, LocalDateTime timestampFrom, LocalDateTime timestampTo) {
+		return readingRepository.findAll();
 	}
 
 	@Override
-	public Mono<TemperatureAndHumidityReading> persistTemperatureAndHumidity(String sensorId, ReadingValue readingValue, LocalDateTime timestamp) {
-		return temperatureAndHumidityReadingRepository.findBySensorId(sensorId)
-				.switchIfEmpty(temperatureAndHumidityReadingRepository.save(fillEntries(new TemperatureAndHumidityReading(sensorId), readingValue, timestamp)))
-				.map(reading -> fillEntries(reading, readingValue, timestamp))
-				.flatMap(reading -> temperatureAndHumidityReadingRepository.save(reading));
-	}
+	public Mono<Reading> persistTemperatureAndHumidity(UUID sensorId, String readingValue, LocalDateTime timestamp) {
+		Reading reading = new Reading();
+		reading.setSensorId(sensorId);
+		reading.setValue(readingValue);
+		reading.setTimestamp(timestamp);
 
-	private TemperatureAndHumidityReading fillEntries(
-			TemperatureAndHumidityReading reading,
-			TemperatureAndHumidityReading.ReadingValue value,
-			LocalDateTime timestamp
-	) {
-		reading.getEntries()
-				.computeIfAbsent(timestamp.toLocalDate().toString(), f -> new HashMap<>())
-				.computeIfAbsent(timestamp.getHour(), f -> new HashMap<>())
-				.computeIfAbsent(timestamp.getMinute(), f -> new HashMap<>())
-				.putIfAbsent(timestamp.getSecond(), value);
-
-		return reading;
+		return readingRepository.save(reading);
 	}
 }
