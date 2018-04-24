@@ -1,20 +1,19 @@
 package com.sensoric.readings.domain.service;
 
 import com.sensoric.readings.domain.model.DHTReading;
-import com.sensoric.readings.domain.model.Reading;
+import com.sensoric.readings.domain.model.DailyReading;
 import com.sensoric.readings.domain.repository.DHTReadingRepository;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.UUID;
 
 @Service
-public class DHTReadingService implements ReadingService<DHTReading> {
+public class DHTReadingService implements ReadingService<DHTReading, DHTReadingService.DHTValue> {
 	private final DHTReadingRepository repository;
 
 	@Autowired
@@ -28,12 +27,20 @@ public class DHTReadingService implements ReadingService<DHTReading> {
 	}
 
 	@Override
-	public Mono<DHTReading> persistReading(UUID sensorId, String readingValue, LocalDateTime timestamp) {
-		DHTReading reading = new DHTReading();
-		reading.setKey(buildKey(sensorId, timestamp));
-		reading.setTemperature(20.0f);
-		reading.setHumidity(55.0f);
+	public Mono<DHTReading> persistReading(UUID sensorId, DHTValue readingValue, LocalDateTime timestamp) {
+		return repository.save(new DHTReading(
+				new DailyReading.DailyKey(
+						sensorId,
+						timestamp.toLocalDate(),
+						timestamp.toLocalTime()
+				),
+				readingValue.getTemperature(),
+				readingValue.getHumidity()
+		));
+	}
 
-		return repository.save(reading);
+	@Data
+	public static final class DHTValue {
+		private final Float temperature, humidity;
 	}
 }
