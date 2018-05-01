@@ -32,8 +32,6 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.boot:spring-boot-starter-data-cassandra'
 
-    compile 'org.springframework.data:spring-data-cassandra:2.1.0.M2'
-
     compile 'io.netty:netty-transport-native-epoll:4.1.22.Final:linux-x86_64'
 }
 

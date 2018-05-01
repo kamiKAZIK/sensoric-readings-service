@@ -1,13 +1,12 @@
 package com.sensoric.readings.domain.model;
 
-import lombok.*;
+import lombok.Data;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyClass;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.UUID;
 
 @Data
@@ -25,6 +24,6 @@ public abstract class DailyReading implements Reading<DailyReading.DailyKey> {
         private final LocalDate writeDate;
 
         @PrimaryKeyColumn(value = "write_time", type = PrimaryKeyType.CLUSTERED)
-        private final LocalTime writeTime;
+        private final Long writeTime;
     }
 }

@@ -1,15 +1,6 @@
 spring:
   application:
-    name: sensor-service
-
-sensoric:
-  security:
-    user:
-      name: readings-user
-      roles: USER
-    manager:
-      name: readings-manager
-      roles: ACTUATOR
+    name: readings-service
 ---
 spring:
   profiles: local
@@ -18,16 +9,3 @@ spring:
      uri: http://localhost:38888
      username: configuration-user
      password: configuration-user
-
-spring.data.cassandra.cluster-name: sensoric
-spring.data.cassandra.keyspace-name: sensoric
-spring.data.cassandra.port: 9999
-
-sensoric:
-  security:
-    user:
-      password: '{noop}readings-user'
-    manager:
-      password: '{noop}readings-manager'
-  mongo:
-    password: 'readings'

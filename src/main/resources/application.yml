@@ -1,0 +1,16 @@
+server:
+  port: 38810
+
+management:
+  endpoint:
+    health:
+      show-details: when-authorized
+
+sensoric:
+  security:
+    user:
+      name: readings-user
+      roles: USER
+    manager:
+      name: readings-manager
+      roles: ACTUATOR

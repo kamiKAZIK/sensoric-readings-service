@@ -23,7 +23,7 @@ public class DHTReadingService implements ReadingService<DHTReading, DHTReadingS
 
 	@Override
 	public Flux<DHTReading> readReadings(UUID sensorId, LocalDateTime timestampFrom, LocalDateTime timestampTo) {
-		return repository.findAll();
+		return repository.findReadings(sensorId, timestampFrom, timestampTo);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class DHTReadingService implements ReadingService<DHTReading, DHTReadingS
 				new DailyReading.DailyKey(
 						sensorId,
 						timestamp.toLocalDate(),
-						timestamp.toLocalTime()
+						timestamp.toLocalTime().toNanoOfDay()
 				),
 				readingValue.getTemperature(),
 				readingValue.getHumidity()
