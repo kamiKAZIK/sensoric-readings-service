@@ -1,42 +1,33 @@
 package com.sensoric.readings.domain.service;
 
 import com.sensoric.readings.domain.model.DHTReading;
-import com.sensoric.readings.domain.model.DailyReading;
 import com.sensoric.readings.domain.repository.DHTReadingRepository;
 import lombok.Data;
+import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
-public class DHTReadingService implements ReadingService<DHTReading, DHTReadingService.DHTValue> {
-	private final DHTReadingRepository repository;
+public class DHTReadingService extends AbstractReadingService<DHTReading, DHTReadingService.DHTValue> {
+	@Autowired
+	private Publisher<Message<DHTReading>> readingsPublisher;
 
 	@Autowired
 	public DHTReadingService(DHTReadingRepository repository) {
-		this.repository = repository;
+		super(repository);
 	}
 
-	@Override
-	public Flux<DHTReading> readReadings(UUID sensorId, LocalDateTime timestampFrom, LocalDateTime timestampTo) {
-		return repository.findReadings(sensorId, timestampFrom, timestampTo);
+	public void persistReadings(Flux<DHTReading> readings) {
+		Flux.from(readingsPublisher)
+				.subscribe(reading -> persistReading(reading.getPayload()));
 	}
 
-	@Override
-	public Mono<DHTReading> persistReading(UUID sensorId, DHTValue readingValue, LocalDateTime timestamp) {
-		return repository.save(new DHTReading(
-				new DailyReading.DailyKey(
-						sensorId,
-						timestamp.toLocalDate(),
-						timestamp.toLocalTime().toNanoOfDay()
-				),
-				readingValue.getTemperature(),
-				readingValue.getHumidity()
-		));
+	public Flux<ServerSentEvent<DHTReading>> subscribe() {
+		return Flux.from(readingsPublisher)
+				.map(message -> ServerSentEvent.builder(message.getPayload()).build());
 	}
 
 	@Data

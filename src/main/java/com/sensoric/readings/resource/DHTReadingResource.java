@@ -2,7 +2,11 @@ package com.sensoric.readings.resource;
 
 import com.sensoric.readings.domain.model.DHTReading;
 import com.sensoric.readings.domain.service.DHTReadingService;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,18 +24,6 @@ public class DHTReadingResource {
         this.service = service;
     }
 
-    @PostMapping
-	public Mono<DHTReading> save(
-			@RequestParam UUID sensorId,
-			@RequestBody DHTReadingService.DHTValue value
-	) {
-		return service.persistReading(
-				sensorId,
-				value,
-				LocalDateTime.now()
-		);
-	}
-
 	@GetMapping
 	public Flux<DHTReading> search(
 			@RequestParam UUID sensorId,
@@ -43,5 +35,10 @@ public class DHTReadingResource {
 				timestampFrom,
 				timestampTo
 		);
+	}
+
+	@GetMapping(path = "/readings", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public Flux<ServerSentEvent<DHTReading>> subscribe() {
+		return service.subscribe();
 	}
 }

@@ -6,5 +6,5 @@ import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
 
 import java.util.UUID;
 
-public interface DHTReadingRepository extends ReactiveCassandraRepository<DHTReading, DailyReading.DailyKey>, DailyReadingRepository<DHTReading> {
+public interface DHTReadingRepository extends CassandraReadingRepository<DHTReading> {
 }
