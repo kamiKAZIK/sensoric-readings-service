@@ -7,6 +7,7 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKeyClass;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Data
@@ -24,6 +25,6 @@ public abstract class DailyReading implements Reading<DailyReading.DailyKey> {
         private final LocalDate writeDate;
 
         @PrimaryKeyColumn(value = "write_time", type = PrimaryKeyType.CLUSTERED)
-        private final Long writeTime;
+        private final LocalTime writeTime;
     }
 }

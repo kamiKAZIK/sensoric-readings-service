@@ -8,8 +8,8 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Table(value = "dht_readings")
 public final class DHTReading extends DailyReading {
     private final Float temperature, humidity;

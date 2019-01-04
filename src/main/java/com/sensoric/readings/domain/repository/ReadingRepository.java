@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoRepositoryBean
-public interface ReadingRepository<T extends Reading> {
+public interface ReadingRepository<K, T extends Reading<K>> {
     Flux<T> findReadings(UUID sensorId, LocalDateTime timestampFrom, LocalDateTime timestampTo);
-    Mono<T> findLastReading(UUID sensorId, LocalDate timestampFrom, LocalDate timestampTo);
+    Mono<T> findLastReading(UUID sensorId, LocalDate dateFrom, LocalDate dateTo);
 }

@@ -11,6 +11,7 @@ import org.springframework.integration.dsl.channel.MessageChannels;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 
 @Configuration
@@ -21,7 +22,7 @@ public class DHTReadingsFlow {
 	public Publisher<Message<DHTReading>> dhtReadingsPublisher() {
 		return IntegrationFlows.from(dhtReadingsFlowInput())
 				.<DHTMessage, DHTReading>transform(message -> {
-					LocalDateTime timestamp = LocalDateTime.now();
+					LocalDateTime timestamp = LocalDateTime.now(Clock.systemUTC());
 
 					return new DHTReading(
 							new DailyKey(

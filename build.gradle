@@ -1,9 +1,8 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.0.0.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.4.RELEASE'
-    id 'io.franzbecker.gradle-lombok' version '1.11'
-    id 'com.palantir.docker' version '0.19.2'
+    id 'org.springframework.boot' version '2.0.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
+    id 'com.palantir.docker' version '0.20.1'
 }
 
 group 'com.sensoric'
@@ -13,29 +12,28 @@ sourceCompatibility = 1.8
 
 repositories {
     jcenter()
-    maven {
-        url 'https://repo.spring.io/libs-milestone'
-    }
 }
 
 dependencyManagement {
     imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.M9'
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.RELEASE'
     }
 }
 
 dependencies {
     compile 'org.springframework.cloud:spring-cloud-config-client'
-    compile 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
-    compile 'org.springframework.cloud:spring-cloud-stream-reactive'
 
-    compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.boot:spring-boot-starter-integration'
     compile 'org.springframework.boot:spring-boot-starter-data-cassandra'
+}
 
-    compile 'io.netty:netty-transport-native-epoll:4.1.22.Final:linux-x86_64'
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.4'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.4'
 }
 
 bootJar {

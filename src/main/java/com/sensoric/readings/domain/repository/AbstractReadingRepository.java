@@ -15,10 +15,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public abstract class AbstractReadingRepository<T extends Reading> implements ReadingRepository<T> {
+abstract class AbstractReadingRepository<K, T extends Reading<K>> implements ReadingRepository<K, T> {
     private final ReactiveCassandraOperations operations;
 
-    protected AbstractReadingRepository(ReactiveCassandraOperations operations) {
+    AbstractReadingRepository(ReactiveCassandraOperations operations) {
         this.operations = operations;
     }
 
@@ -45,7 +45,7 @@ public abstract class AbstractReadingRepository<T extends Reading> implements Re
 
     private List<LocalDate> listDates(LocalDate dateFrom, LocalDate dateTo) {
         return IntStream.rangeClosed(0, Long.valueOf(dateFrom.until(dateTo, ChronoUnit.DAYS)).intValue())
-                .mapToObj(day -> dateFrom.plusDays(day))
+                .mapToObj(dateFrom::plusDays)
                 .collect(Collectors.toList());
     }
 
