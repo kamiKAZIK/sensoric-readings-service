@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 @Data
-public abstract class DailyReading implements Reading<DailyReading.DailyKey> {
+public abstract class DailyReading {
     @PrimaryKey
     private final DailyKey key;
 
